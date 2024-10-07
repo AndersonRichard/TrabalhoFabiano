@@ -96,3 +96,38 @@ def get_favorite():
         "universidade": "Univás"
     }
     return jsonify(favorito), 200
+
+@app.route('/favorito/save', methods=['POST'])
+def save_favorite():
+    data = request.json
+    conn = db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        """INSERT INTO favoritos (character_name, movie_name, ship_name, vehicle_name, species_name, planet_name)
+           VALUES (?, ?, ?, ?, ?, ?)""",
+        (data['character'], data['movie'], data['ship'], data['vehicle'], data['species'], data['planet'])
+    )
+    conn.commit()
+    return jsonify({"message": "Favorito salvo com sucesso!"}), 201
+
+
+@app.route('/getFavorito', methods=['GET'])
+def get_favorite():
+    conn = db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM favoritos")
+    data = cursor.fetchone()
+    
+    favorito = {
+        "character": data[0],
+        "movie": data[1],
+        "ship": data[2],
+        "vehicle": data[3],
+        "species": data[4],
+        "planet": data[5],
+        "aluno1": "Anderson Richard",
+        "matricula1": "12345",
+        "curso": "Sistemas de Informação",
+        "universidade": "Univás"
+    }
+    return jsonify(favorito), 200
