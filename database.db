@@ -1,0 +1,14 @@
+CREATE TABLE characters (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    birth_year TEXT NOT NULL
+);
+
+CREATE TABLE favoritos (
+    character_name TEXT,
+    movie_name TEXT,
+    ship_name TEXT,
+    vehicle_name TEXT,
+    species_name TEXT,
+    planet_name TEXT
+);
