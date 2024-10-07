@@ -4,7 +4,6 @@ import requests
 
 app = Flask(__name__)
 
-
 def db_connection():
     conn = sqlite3.connect('database.db')
     return conn
@@ -13,6 +12,10 @@ def db_connection():
 @app.route('/')
 def home():
     return jsonify({'status': 'Ok'}), 200
+    return jsonify({'message': 'Olá, mundo!'})
+
+if __name__ == "__main__":
+app.run(debug=True)
 
 
 def swapi_request(endpoint):
@@ -24,19 +27,19 @@ def swapi_request(endpoint):
         return jsonify({"error": str(err)}), 400
 
 
-@app.route('/characters', methods=['GET'])
+@app.route('/people', methods=['GET'])
 def get_characters():
     data, status = swapi_request('people/')
     return jsonify(data), status
 
 
-@app.route('/characters/<int:id>', methods=['GET'])
+@app.route('/people/<int:id>', methods=['GET'])
 def get_character(id):
     data, status = swapi_request(f'people/{id}/')
     return jsonify(data), status
 
 
-@app.route('/characters/<int:id>/save', methods=['POST'])
+@app.route('/people/<int:id>/save', methods=['POST'])
 def save_character(id):
     conn = db_connection()
     cursor = conn.cursor()
@@ -53,7 +56,7 @@ def save_character(id):
         return jsonify({"error": "Erro ao salvar personagem"}), status
 
 
-@app.route('/characters/<int:id>/delete', methods=['DELETE'])
+@app.route('/people/<int:id>/delete', methods=['DELETE'])
 def delete_character(id):
     conn = db_connection()
     cursor = conn.cursor()
@@ -97,13 +100,11 @@ def get_favorite():
     }
     return jsonify(favorito), 200
 
-# Rota para salvar o favorito (função renomeada para evitar o conflito)
 @app.route('/favorito/save', methods=['POST'])
-def save_favorite_route():  # Alterei o nome da função para evitar conflito
+def save_favorite_route():
     conn = db_connection()
     cursor = conn.cursor()
     
-    # Exemplo de dados que podem ser salvos
     cursor.execute(
         """INSERT INTO favoritos (character, film, starship, vehicle, species, planet) VALUES (?, ?, ?, ?, ?, ?)""",
         ("Luke Skywalker", "A New Hope", "X-wing", "Speeder", "Human", "Tatooine")

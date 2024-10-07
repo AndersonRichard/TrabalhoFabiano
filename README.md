@@ -13,3 +13,4 @@
 3. Crie o banco de dados com o arquivo `database.db`.
 4. Execute o servidor com `python app.py`.
 5. Acesse as rotas no navegador ou via Postman.
+6. Caso de erro, rodar a seguinte linha: `pip install --upgrade Flask Werkzeug`
