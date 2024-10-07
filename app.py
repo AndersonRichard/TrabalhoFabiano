@@ -97,15 +97,16 @@ def get_favorite():
     }
     return jsonify(favorito), 200
 
+# Rota para salvar o favorito (função renomeada para evitar o conflito)
 @app.route('/favorito/save', methods=['POST'])
-def save_favorite():
-    data = request.json
+def save_favorite_route():  # Alterei o nome da função para evitar conflito
     conn = db_connection()
     cursor = conn.cursor()
+    
+    # Exemplo de dados que podem ser salvos
     cursor.execute(
-        """INSERT INTO favoritos (character_name, movie_name, ship_name, vehicle_name, species_name, planet_name)
-           VALUES (?, ?, ?, ?, ?, ?)""",
-        (data['character'], data['movie'], data['ship'], data['vehicle'], data['species'], data['planet'])
+        """INSERT INTO favoritos (character, film, starship, vehicle, species, planet) VALUES (?, ?, ?, ?, ?, ?)""",
+        ("Luke Skywalker", "A New Hope", "X-wing", "Speeder", "Human", "Tatooine")
     )
     conn.commit()
     return jsonify({"message": "Favorito salvo com sucesso!"}), 201
